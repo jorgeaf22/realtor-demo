@@ -1186,6 +1186,6 @@ function checkQueryParameters() {
 	}
 
 	if (username) {
-		$('#email3').val(username);
+		$('#email').val(username);
 	}
 }// JavaScript Document
