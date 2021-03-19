@@ -1,0 +1,9 @@
+#customSettingsDiv {
+    width : 70%;
+    margin-left: 15%;
+    text-align: center;
+    margin-top : 3%;
+    background-color: white;
+    border : 2px solid black;
+    padding : 5%;
+}

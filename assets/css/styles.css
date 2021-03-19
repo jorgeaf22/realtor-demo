@@ -1,0 +1,11 @@
+.spacesInfoInputs {
+  display: block;
+  width: 60%;
+  margin-left: 20%;
+}
+
+#spacesControlsButtonGroup button {
+  margin-left: 3%;
+  background-color: white;
+}
+

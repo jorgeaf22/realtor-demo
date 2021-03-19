@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;700&display=swap" rel="stylesheet">
+
+    <!-- styles -->
+    <link rel="stylesheet" href="app-2.css">
+
+    <!-- Code -->
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <!--UI LIBS (from JavaScript Client SDK) -->
+    <script src="js/lib/xmlToJSON.min.js"></script>
+    <script src="js/lib/eventSource.min.js"></script>
+    <script src="js/lib/konva.min.js"></script>
+    <script src="js/lib/unorm.min.js"></script>
+    <!-- JSCSDK (from JavaScript Client SDK) -->
+    <script src="js/lib/AvayaClientServices.min.js"></script>
+    <script src="js/lib/AvayaClientServices.Renderer.min.js"></script>
+    <script src="js/lib/AvayaClientServicesWorker.min.js"></script>
+
+
+    <title>Avaya</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+  <style>
+      .thank-you{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+      }
+      .thank-you h2{
+          color: #666666;
+          font-size: 2rem;
+          font-family: "Noto Sans JP", sans-serif;
+          font-weight: 700;
+          text-align: center;
+
+      }
+  </style>
+</head>
+
+<body>
+    <div id="allin">
+        <section class="hero container-fluid">
+            <div class="row">
+                <div class="col-lg-7 left-hero">
+                    <div class="hero__main">
+                        <div class="login">
+                            <div class="login__items">
+                                <i><img src="img/user-icon.png" alt=""></i>
+                                <a type="button" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Log in</a>
+                                <span></span>
+                                <a type="button" data-bs-toggle="modal" data-bs-target="#createModal" data-bs-dismiss="modal">Sign Up</a>
+                            </div>
+                        </div>
+                        <div class="nav">
+                            <div class="nav__brand">
+                                <a href="index.html">
+                                    <img src="img/logo-real-state.png" alt="" height="100px">
+                                </a>
+                            </div>
+                            <div class="nav__items">
+                                <a href="#">Search</a>
+                                <a href="#">Buy</a>
+                                <a href="#">Sell</a>
+                                <a href="#">Get an Instant Offer</a>
+                                <a href="#" class="">About Us</a>
+                            </div>
+                        </div>
+                        <div class="hero__content">
+                            <div class="row align-items-center">
+                                <div class="col-lg-12 hero__content__text">
+                                    <h2>A new way <span>to</span></h2>
+                                    <h1>Discovery</h1>
+                                    <h4>We deliver latest market intel that attracts qualifed buyers, selles, renters <br> and investors to your listing
+                                    </h4>
+                                    <br>
+                                    <br>
+                                    <a class="btn btn-primary" href="">Search</a>
+
+                                </div>
+                                <div class="col-lg-7 hero__content__img">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 hero-v-2">
+                </div>
+            </div>
+
+
+            <a href="#" class="float" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <img class="myfloat" src="img/floating-btn.png" alt="" height="50px">
+            </a>
+
+
+            <!-- Modal Init-->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-5 img-modal">
+                                        <img class="img-fluid left-img" src="img/modal-img.png" alt="">
+                                    </div>
+                                    <div class="col-md-7 a-modal">
+                                        <div class="login-buttons">
+                                            <a type="button" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal" class="btn btn-danger" href=""><i><img class="mr-5" src="img/login.png" height="40px" alt=""></i>Log In</a>
+                                            <a type="button" data-bs-toggle="modal" data-bs-target="#createModal" data-bs-dismiss="modal" class="btn btn-danger" href=""><i><img class="mr-5" src="img/create.png" height="40px" alt=""></i>Create Account</a>
+                                            <a type="button" data-bs-toggle="modal" data-bs-target="#guesModal2" data-bs-dismiss="modal" class="btn btn-danger"><i><img class="mr-5" src="img/floating-btn.png" height="40px" alt=""></i> Chat as a guest</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Login-->
+            <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-5 img-modal">
+                                        <img class="img-fluid left-img" src="img/modal-img.png" alt="">
+                                    </div>
+                                    <div class="col-md-7 a-modal">
+                                        <div id="entryModeDiv" class="login-form">
+                                            <form id="lform" method="post">
+                                                <!-- <div class="mb-3">
+                                                    <label class="form-label">Room Number</label>
+                                                    <input type="text" id="roomNumber" class="form-control">
+                                                </div> -->
+
+
+                                                <div class="position-absolute top-0 mt-4 center p-3" style="z-index: 5">
+                                                    <div id="liveToast" class="toast hide bg-light" role="alert" aria-live="assertive" aria-atomic="true">
+                                                      <div class="toast-body d-flex align-items-center justify-content-center">
+                                                        <img src="img/icon.png" width="30" alt="">
+                                                        <p class="p-2 m-0" style="font-size: 1rem; font-family: 'Noto Sans JP'; color: #da291c; font-weight: 700; ">Thank you for your Register</p> 
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label class="form-label">Email Address</label>
+                                                    <input  type="email" id="email3" required class="form-control">
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label class="form-label">Password</label>
+                                                    <input  type="password" required id="password3" class="form-control">
+                                                </div>
+
+                                                <div class="login-butons">
+                                                    <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-dismiss="modal" class="btn btn-danger btn-danger--gray">Back</button>
+                                                    <!-- <button class="btn btn-danger btn-danger--small" id="joinSpaceButton2" data-bs-toggle="modal" data-bs-target="#loginOkModal" data-bs-dismiss="modal" type="button">Join Space</button>  -->
+                                                    <button class="btn btn-danger btn-danger--small" id="find" type="submit" onclick="findSpacesUser()">Join Space</button> 
+                                                    <!-- <button id="find" class="btn btn-primary" onclick="findSpacesUser()">Find User</button> -->
+                                                </div>
+                                                <!-- <div class="mb-3 form-check forgot">
+                                                    <a href="">Forgot your password?</a>
+                                                </div> -->
+                                            </form>
+                                            <script>
+                                                $(document).ready(function() {
+                                                    $("#lform").validate();
+                                                });
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="modal-body">
+                            <div class="container-fluid">
+                                <div id="entryModeDiv">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col"></div>
+                                            <div class="col text-center"><img id="brandLogo" src="assets/img/abc.jpg"></div>
+                                            <div class="col"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div style="width: 50%; margin-left:25%;">
+                                                <div id="spacesInfoDiv" style="/*text-align: center;*/">
+                                                    <input type="text" id="roomNumber" class="spacesInfoInputs form-control" placeholder="Room Number">
+                                                    <input type="text" id="userName" class="spacesInfoInputs form-control" placeholder="Username">
+                                                    <input type="password" id="password" class="spacesInfoInputs form-control" placeholder="Password">
+                                                    <div class="form-check" style="width: 60%;margin-left: 40%;">
+                                                        <input class="form-check-input" type="checkbox" id="delete">
+                                                        <label class="form-check-label" for="formCheck-1">Delete</label>
+                                                    </div>
+                                                    <div class="form-check" style="display:none;width: 60%;margin-left: 40%;">
+                                                        <input class="form-check-input" type="checkbox" id="audioDefault">
+                                                        <label class="form-check-label" for="formCheck-2">Mute Audio</label>
+                                                    </div>
+                                                    <div class="form-check" style="display:none;width: 60%;margin-left: 40%;">
+                                                        <input class="form-check-input" type="checkbox" id="videoDefault">
+                                                        <label class="form-check-label" for="formCheck-3">Hide Video</label>
+                                                    </div>
+                                                </div><button class="btn btn-success" id="joinSpaceButton" type="button" style="width: 80%;margin-left: 10%;margin-top: 2%;">Join Space</button></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col"></div>
+                                            <div class="col"></div>
+                                            <div class="col"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal create acc-->
+            <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-5 img-modal">
+                                        <img class="img-fluid left-img" src="img/modal-img.png" alt="">
+                                    </div>
+                                    <div class="col-md-7 a-modal">
+                                        <div class="login-form">
+                                            <form id="s-form" class="container form1">
+                                                <div class="row form-group">
+                                                    <div class="mb-3 col-6">
+                                                        <label class="form-label">First Name*</label>
+                                                        <input class="form-control" id="firstname" type="text" required>
+                                                    </div>
+                                                    <div class="mb-4 col-6">
+                                                        <label class="form-label">Last Name*</label>
+                                                        <input class="form-control" id="lastname" type="text" required>
+                                                    </div>
+                                                    <div class="mb-3 col-6">
+                                                        <label class="form-label">Mobile Phone Number*</label>
+                                                        <input class="form-control" id="telephone" type="text" required>
+                                                    </div>
+                                                    <div class="mb-4 col-6">
+                                                        <label class="form-label">Email Address</label>
+                                                        <input class="form-control emailown" id="email" type="email" required>
+                                                    </div>
+                                                    <div class="mb-4 col-12">
+                                                        <label class="form-label">Password*</label>
+                                                        <input type="password" class="form-control" id="password" required>
+                                                    </div>
+                                                </div>
+
+                                                
+                                                <!-- <div class="mb-3 form-check forgot">
+                                                    <a href="">Forgot your password?</a>
+                                                </div> -->
+                                                
+                                            </form>
+                                            <div class="d-flex justify-content-evenly row login-butons">
+                                                <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-dismiss="modal" class="col-sm-4 btn btn-danger btn-danger--gray">Back</button>
+                                                <!-- <button class="col-sm-4 btn btn-danger btn-danger--gray" onclick="findSpacesUser()" id="find">Find User</button> -->
+                                                <button class="col-sm-4 btn btn-danger btn-danger--small m-0 loginown" disabled onclick="newUser()" id="login">Register</button>
+                                            </div>
+                                            
+                                            <script>
+                                                 $(".emailown").on("blur", function(){
+                                                    if($("#s-form").valid())
+                                                {
+                                                    $(".loginown").removeAttr("disabled");
+                                                }
+                                                }); 
+                                            </script>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            
+            
+
+
+            <!-- Modal login ok-->
+            <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="loginOkModal" tabindex="-1" aria-labelledby="loginOkModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-spaces modal-xl modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12 img-modal">
+
+
+                                        <div id="videoModeDiv" style="display: none;">
+                                            <div id="videoModeContainer" class="container" style="display: grid;width: 100%;">
+                                                <div id="topVideoRow" class="row">
+                                                    <div class="col">
+                                                        <div><span id="roomName">My Meeting Room</span><i class="fa fa-user brandColor" style="margin-left: 55%; font-size: 1.2rem; color: #666;"></i><i class="fa fa-gear brandColor" style="margin-left: 1%; font-size: 1.2rem; color: #666;" onClick="confUI.showSpeakerSettings()"
+                                                                data-toggle="modal" data-target="#speakerSettingsModal"></i>
+                                                            <span id="usernameDisplay" style="margin-left: 1%;">ajs</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="videoDisplayDivParentRow" class="row">
+                                                    <div class="col-9" id="videoDisplayDiv">
+                                                        <button id="toggleVideoButton" class="btn btn-danger--gray toggleButton brandBackgroundColor brandText">Toggle </button>
+                                                        <button id="toggleChatButton" class="btn btn-primary toggleButton brandBackgroundColor brandText" style="display:none;">Show Chat </button>
+                                                        <button id="increaseZoomButton" class="btn btn-primary zoomButton brandBackgroundColor brandText" onclick="setZoom(0.15)" style="display:none;">+</button>
+                                                        <button id="decreaseZoomButton" class="btn btn-primary zoomButton brandBackgroundColor brandText" onclick="setZoom(-0.15)" style="display:none;">-</button>
+                                                        <button id="resetZoomButton" class="btn btn-primary zoomButton brandBackgroundColor brandText" onclick="resetZoom()" style="display:none;">O</button>
+
+
+                                                        <video autoplay="autoplay" id="localVideoElement" class="videoContentEl" width="400" height="auto" playsinline muted></video>
+                                                        <video autoplay="autoplay" id="remoteVideoElement" class="videoContentEl" width="400" height="auto" playsinline></video>
+                                                        <div id="screenReceiveFrame"></div>
+                                                    </div>
+                                                    <div class="col-3" id="chatDisplayDiv">
+                                                        <div id="littleVideoDiv">
+                                                            <video autoplay="autoplay" id="littleVideoDisplay" class="littleBigVideo" playsinline muted></video>
+                                                            <video autoplay="autoplay" id="littleVideoDisplay2" class="littleVideos" playsinline muted></video>
+                                                        </div>
+                                                        <!-- <button id ="showVideoButton" class ="btn btn-info toggleButton" style ="display:none;">Show Video</button> -->
+                                                        <div>
+                                                            <ul class="nav nav-tabs chat-nav-tabs">
+                                                                <li id="chatTab" class="nav-item"><a class="brandBackgroundColor brandText nav-link active" role="tab" data-toggle="tab" href="#tab-1">Chat</a></li>
+                                                                <li id="peopleTab" class="nav-item"><a class="brandBackgroundColor brandText nav-link" role="tab" data-toggle="tab" href="#tab-2">People</a></li>
+                                                                <li id="showVideoButton" class="nav-item"><a class="brandBackgroundColor brandText nav-link" role="tab" data-toggle="tab" href="#tab-1">Video</a></li>
+                                                            </ul>
+                                                            <div class="tab-content">
+                                                                <div class="tab-pane active" role="tabpanel" id="tab-1">
+                                                                    <div id="console-log" readonly=""></div>
+                                                                    <textarea id="message" style="width: 100%;"></textarea>
+                                                                    <button class="btn btn-primary-own brandBackgroundColor brandText mt-2" id="sendMsg" type="button" style="width: 100%;">Send Chat</button>
+                                                                </div>
+                                                                <div class="tab-pane" role="tabpanel" id="tab-2">
+                                                                    <div id="peopleInMeeting"> </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="padding: 0;">
+                                                    <div class="col" style="padding: 0;">
+                                                        <div id="spacesControlsDiv">
+                                                            <div class="btn-group brandBackgroundColor" role="group" id="spacesControlsButtonGroup" style="width: 80%;margin-left: 10%;margin-right: 10%;padding: 2%; padding-bottom: 2%; color: rgb(33,41,38);">
+                                                                <button style="background: transparent !important;" data-bs-dismiss="modal" aria-label="Close" class="btn" id="connectSocket" type="button"><img style="width: 32px;" src="assets/img/end-call@2.png"></button>
+                                                                <button style="background: transparent !important;" class="btn" id="screenshare" type="button">&nbsp;<img style="width: 32px;" src="assets/img/screenshare-on@2.png"></button>
+                                                                <button style="background: transparent !important;" class="btn" id="muteAudio" type="button">&nbsp;<img style="width: 32px;" src="assets/img/audio@2.png"></button>
+                                                                <button style="background: transparent !important;" class="btn" id="muteVideo" type="button">&nbsp;<img style="width: 32px;" src="assets/img/video@2.png"></button>
+                                                                <button style="background: transparent !important;" class="btn" id="startRecording" type="button">&nbsp;<img style="width: 32px;" src="assets/img/filetype-mp4@2.png"></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal guest ok-->
+            <div class="modal fade" id="guesModal" tabindex="-1" aria-labelledby="guessModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered guest-modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+
+                                    <div class="col-md-12 a-modal">
+                                        <div class="guest-chat">
+                                            <div class="guest-chat__title">
+                                                <p><strong>Chat</strong></p>
+                                            </div>
+                                            <div class="guest-chat__conversation">
+                                                <p><strong>Anonymous User</strong> has joined the chat.</p>
+                                                <p><strong>Sales Representative</strong> has joined the chat.</p>
+                                            </div>
+                                            <div class="form-group guest-chat__textarea">
+                                                <textarea placeholder="Write your comment here..." class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                            </div>
+                                            <div class="login-butons login-butons-send">
+
+                                                <button type="button" data-bs-toggle="modal" data-bs-target="#" data-bs-dismiss="modal" class="btn btn-danger send-btn">Send Chat <i><img class="mr-5" src="img/send.png" height="15px" style="margin-left: 4px;" alt=""></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal chat 2-->
+            <div class="modal fade"  data-bs-backdrop="static" id="guesModal2" tabindex="-1" aria-labelledby="guessModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm modal-dialog-centered">
+                    <div style="border-bottom: 8px solid #cccccc;" class="modal-content">
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="chat-in row">
+                                    <div class="col-sm-8 title-chat">
+                                        <figure><img src="images/chat.png" alt=""></figure>
+                                        <h1>Spaces Webchat</h1>
+                                    </div>
+                                    <!-- <div class="col-sm-4 d-flex">
+                                        <input placeholder="Room Number" type="email" class="form-control" id="room2">
+                                    </div> -->
+                                    <!-- <div class="col-sm-4 d-flex">
+                                        <input placeholder="Password" class="form-control" type="password" id="password2">
+                                    </div> -->
+                                    <div class="col-sm-4 mt-2">
+                                        <button id="connect2" class="btn btn-danger" onclick="startConnect()">Connect</button>
+                                    </div>
+
+
+
+                                    <div class="col-sm-12 mt-3 mb-3">
+                                        <div class="col-12">
+                                            <div style="width: 100%;" class="form-group mb-3">
+                                                <textarea placeholder="Message" class="form-control" id="message2" rows="3"></textarea>
+                                            </div>
+                                            <button style="padding: 0.8rem 8rem;" id="sendMsg2" class="btn btn-primary col-sm-12" onclick="sendMsg()">Send</button>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-sm-12">
+                                        <div class="col-12">
+                                            <textarea readonly="readonly" class="form-control" id="console-log2" rows="10"></textarea>
+                                        </div>
+                                        
+                                        <button style="float: right;" type="button" onclick="disconnect()" data-bs-toggle="modal"  data-bs-target="#exampleModal" data-bs-dismiss="modal" class="btn btn-danger btn-danger--gray mt-2">Back</button>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+        </section>
+
+
+        <section class="search container">
+            <div class="search__nav-bar">
+                <div class="tabs">
+                    <ul class="nav nav-tabs p-0" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Price</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Type</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Beds</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="contact-tab1" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Baths</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="contact-tab2" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">More</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab"></div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"></div>
+                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab"></div>
+                    </div>
+                </div>
+                <div class="search-input">
+                    <nav class="navbar navbar-light search-input__bar">
+                        <form class="container-fluid">
+                            <div class="input-group">
+                                <span class="input-group-text icon-search" id="basic-addon1"> <i><img src="img/search-icon.png" alt="" height="30px"></i></span>
+                                <input type="text" class="form-control keyword-search" placeholder="Type any Area, Addres, ZIP, School, etc." aria-label="Username" aria-describedby="basic-addon1">
+                            </div>
+                        </form>
+                    </nav>
+                    <div class="search-setting">
+                        <i><img class="setting-icon" src="img/setting-icon.png" alt="" height="30px"></i>
+                        <a class="btn btn-primary" href="">Search</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <br>
+        <br>
+        <section class="house-description container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h5 class="house-description__street">25 Sycamore Drive,</h5>
+                    <h5 class="house-description__zone">Greenhill, North Carolina</h5>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="house-image-principal">
+                        <img class="img-fluid" src="img/house-1.png" alt="">
+                    </div>
+                    <div class="house-images-secundary">
+                        <img class="img-fluid" src="img/house-2.png" alt="">
+                        <img class="img-fluid" src="img/house-3.png" alt="">
+                        <img class="img-fluid" src="img/house-4.png" alt="">
+                        <img class="img-fluid" src="img/house-5.png" alt="">
+                    </div>
+                    <br>
+                    <br>
+                    <div class="callto" style="text-align: center;">
+                        <a class="btn btn-primary" href="">View All (20)</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 offset-lg-1">
+                    <div class="row">
+                        <div class="col-12 price-container">
+                            <p class="price m-0">
+                                $300.000
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row house-information">
+                        <div class="col-6 house-data">
+                            <p>3</p>
+                            <p>Beds</p>
+                        </div>
+                        <div class="col-6 house-data">
+
+                        </div>
+                        <div class="col-6 house-data">
+                            <p>2</p>
+                            <p>Baths</p>
+                        </div>
+                        <div class="col-6 house-data">
+                            <p>0.06</p>
+                            <p>Acres</p>
+                        </div>
+                        <div class="col-6 house-data">
+                            <p>1,092</p>
+                            <p>SQFT</p>
+                        </div>
+                        <div class="col-6 house-data">
+                            <p>0</p>
+                            <p>1/2 Baths</p>
+                        </div>
+                        <div class="col-6 house-data house-data--last">
+
+                        </div>
+                        <div class="col-6 house-data house-data--last">
+                            <p>$275</p>
+                            <p>$/SQFT</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 house-data house-data--neighborhood">
+                            <p>Neighborhood:</p>
+                        </div>
+                        <div class="col-12 house-data house-data--type">
+                            <p>Type:</p>
+                        </div>
+                        <div class="col-6 house-data house-data--country house-data--last">
+                            <p>Country</p>
+                        </div>
+                        <div class="col-6 house-data house-data--multifamily house-data--last">
+                            <p>Multi-Family</p>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12 arapahoe">
+                            <p>Arapahoe</p>
+                        </div>
+                        <div class="col-12">
+                            <h5 class="house-description__title">Description</h5>
+                            <p class="house-description__text">
+                                Well maintained townhome in desirable Sunburst subdivision! 3 good-sized bedrooms, 2 bathrooms with large deck on the back. Updates include: all carpets have been replaced with wood laminate, bathroom light/- vanity updated, opened up wall between kitchen
+                                and living room for a more open floor plan, fully remodeled kitchen to include new stainless appliances,replaced wood fireplace with gas fireplace,removed cracked patio and poured a larger slab, garage has above head storage
+                                and workspace. Lawn service on the front, water and trash included in HOA. Roof replaced in 2014, hot water heaterreplaced in 2015.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </section>
+        <br>
+        <br>
+        <section class="container propiedades-rela">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h5 class="house-description__street">Related</h5>
+                    <h5 class="house-description__zone">Properties</h5>
+                </div>
+            </div>
+            <br>
+            <div class="row related">
+                <div class="col-6 col-lg-3 item">
+                    <img class="img-fluid" src="img/house-2.png" alt="">
+                </div>
+                <div class="col-6 col-lg-3 item">
+                    <img class="img-fluid" src="img/house-3.png" alt="">
+                </div>
+                <div class="col-6 col-lg-3 item">
+                    <img class="img-fluid" src="img/house-4.png" alt="">
+                </div>
+                <div class="col-6 col-lg-3 item">
+                    <img class="img-fluid" src="img/house-5.png" alt="">
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="legal">
+            <div class="legal__text">
+                <p>
+                    Licensed in the State of Colorado, USA
+                    <br>
+                    <br> The content relating to real estate for sale in this Web site comes in part from the Internet Data eXchange (IDX) program of METROLIST, INC., DBA RECOLORADO®. Real estate listings held by brokers otherthan eXp Realty | Peak Properties
+                    Group are marked with the IDX Logo. This information is being provided for the consumers’ personal, non-commercial use and may not be used for any other purpose. All information subject to change and should be independently verified.
+                    <br>
+                    <br> 1. This publication is designed to provide information regarding the subject matter covered. It is displayed with the understanding that the publisher and authors are not engaged in rendering real estate, legal, accounting, tax,
+                    or other professional services and that the publisher and authors are not offering such advice in this publication. If real estate, legal, or other expert assistance is required, the services of a competent, professional person should
+                    be sought.
+                    <br>
+                    <br> 2. The information contained in this publication is subject to change without notice. METROLIST, INC., DBA RECOLORADO MAKES NO WARRANTY OF ANY KIND WITH REGARD TO THIS MATERIAL, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+                    OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. METROLIST, INC., DBA RECOLORADO SHALL NOT BE LIABLE FOR ERRORS CONTAINED HEREIN OR FOR ANY DAMAGES IN CONNECTION WITH THE FURNISHING, PERFORMANCE, OR USE OF THIS MATERIAL.
+                    <br>
+                    <br> 3. PUBLISHER’S NOTICE: Allreal estate advertised herein is subject to the Federal Fair Housing Act and the Colorado Fair Housing Act, which Acts make it illegalto make or publish any advertisement thatindicates any preference,
+                    limitation, or discrimination based on race, color, religion, sex, handicap, familial status, or national origin.
+                    <br>
+                    <br> 4. METROLIST, INC., DBA RECOLORADO will not knowingly accept any advertising forreal estate that is in violation of the law. All persons are hereby informed that all dwellings advertised are available on an equal opportunity basis.
+                    <br> 5. ALL RIGHTS RESERVED WORLDWIDE. No part of this publication may be reproduced, adapted, translated, stored in a retrieval system or transmitted in any form or by any means, electronic, mechanical, photocopying,recording, or
+                    otherwise, withoutthe prior written permission of the publisher. The information contained herein including but not limited to alltext, photographs, digital images, virtualtours, may be seeded and monitored for protection and tracking.
+                </p>
+            </div>
+        </section>
+
+
+
+
+        <footer class="footer">
+            <div class="container">
+                <div class="row footer__row">
+                    <div class="col-sm-12 col-lg-4">
+                        <img src="img/logo-real-state-white.png" alt="" height="120px">
+                    </div>
+                    <div class="col-sm-12 col-lg-5 footer-center">
+                        <div class="nav__items nav__items--footer">
+                            <a href="#">Search</a>
+                            <a href="#">Buy</a>
+                            <a href="#">Sell</a>
+                            <a href="#">Get an Instant Offer</a>
+                            <a href="#">About Us</a>
+                        </div>
+                        <br>
+                        <div class="copyright">
+                            <p>© all rights reserved | 2020</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-lg-3 social-media">
+
+                        <p style="color: #fff">Follow us</p>
+
+                        <div class="rrss">
+                            <img src="img/fb.png" alt="" width="28px">
+                            <img src="img/twitter.png" alt="" width="28px">
+                            <img src="img/whatsapp.png" alt="" width="28px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+
+
+
+
+
+
+
+    <div id="speakerSettingsModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Device Settings</h4>
+                    <button type="button" class="close" data-dismiss="modal" onClick="confUI.closeSpeakerSettings()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td align="right"><label for="micList"> Microphone:    </label></td>
+                            <td align="left"><select class="form-control" cols="10" id='micList' name='micList' onClick="selectMic()"></select></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><label for="cameraList">Camera:    </label></td>
+                            <td align="left"><select class="form-control" cols="10" id='cameraList' name='cameraList' onClick="selectCamera()"></select></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><label for="speakersList">Speakers:   </label> </td>
+                            <td align="left"><select class="form-control" cols="10" id='speakersList' name='speakersList' onClick="selectSpeakers()"></select></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onClick="confUI.closeSpeakerSettings()">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div id="customSettingsDiv" style="display:none;">
+        <h3 class="customMessage"> Set your custom settings </h3>
+        <p> Custom Image: <input id="custom-image" type="file" /> </p>
+        <p id="custom-status-p">Image Status: <span id="custom-status"></span></p>
+
+        <p> Custom Color: <input id="custom-color" type="color" /> </p>
+        <p> Text Color: <input id="custom-text-color" type="color" /> </p>
+        <p id="custom-color-status-p">Color Status: <span id="custom-color-status"></span></p>
+
+        <div>
+            <button id="saveCustomButton" class="btn btn-success"> Save </button>
+            <button id="leaveCustomButton" class="btn btn-info"> Back </button>
+            <button id="removeCustomSettingsButton" class="btn btn-danger"> Clear Settings </button>
+        </div>
+
+    </div>
+
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+    <!-- <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script> -->
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+    -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <!-- <script src="assets/js/theme.js"></script> -->
+    <script src="js/confUI.js"></script>
+    <script src="js/conf.js"></script>
+    <script src="js/custom.js"></script>
+    <script src="js/utilities.js"></script>
+    <link href="css/conf.css" rel="stylesheet" />
+    <link href="css/customSettings.css" rel="stylesheet" />
+    <script src="js/chat.js"></script>
+
+
+
+
+
+
+</body>
+
+</html>
