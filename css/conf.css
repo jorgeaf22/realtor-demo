@@ -96,21 +96,32 @@ body {
     margin-bottom: 5px;
     margin-left: 1%;
     margin-right: 1%;
+    background: #fce4c5;
+    border-radius: 5px;
+    padding: 10px;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 13px;
+    max-width: 470px;
+    box-sizing: content-box;
 }
 
 .log-element-sender {
     font-weight: bold;
     font-style: italic;
+    font-size: 13px;
+    font-family: "Noto Sans JP", sans-serif;
 }
 
-.log-element-msg {}
+.log-element-msg {
+    word-wrap: break-word;
+}
 
 #console-log {
     background-color: white;
-    padding: 7%;
-    border: 2px solid #eee;
+    padding: 2%;
     width: 100%;
     overflow-y: scroll;
+    min-height: 100px;
 }
 
 .littleVideos {
@@ -126,4 +137,63 @@ body {
     margin-right: 10%;
     margin-left: 25%;
     height: 100px;
+}
+
+
+
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile + label {
+    max-width: 80%;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0.625rem 1.25rem;
+    width: 100%;
+    margin-right: 1rem;
+}
+
+.inputfile + label svg {
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    fill: currentColor;
+    margin-top: -0.25em;
+    margin-right: 0.25em;
+}
+
+.iborrainputfile {
+	font-size:16px; 
+	font-weight:normal;
+	font-family: "Noto Sans JP", sans-serif;
+    color: #000;
+}
+
+/* style 1 */
+
+.inputfile-1 + label {
+    color: #fff;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-family: "Noto Sans JP", sans-serif;
+    border-radius: 10px;
+}
+
+.inputfile-1:focus + label,
+.inputfile-1.has-focus + label,
+.inputfile-1 + label:hover {
+    background-color: #f1f1f1;
 }

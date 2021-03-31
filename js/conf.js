@@ -66,21 +66,28 @@ var speakerDevices = ["junk"];
 
 let contentSharingRenderer;
 
+var authenticatedToken;
+var authenticatedSocketConnection;
 
-$(document).ready(init);
+$(document).ready(initConfSettings);
 
-function init() {
+function initConfSettings() {
+	console.log("setting incall to false");
+	inCall = false;
 	checkQueryParameters();
 	confUI.setUp();
 	videoUnmuted = true;
 	audioUnmuted = true;
 	onScreenShare = false;
 	recording = false;
-	inCall = false;
 
 	initializeMicList();
 	initializeCameraList();
 	initializeSpeakersList();
+}
+
+function setSpaceId(room) {
+	spaceId = room;
 }
 
 function populateAudioDevices() {
@@ -308,7 +315,8 @@ function deleteRoom() {
 	});
 }
 
-function trace(text) {
+function writeToTrace(text) {
+	console.log("writeToTrace " + text);
 	text = text.trim();
 	confUI.addToConsole(text);
 }
@@ -432,9 +440,12 @@ function stopRecording() {
 }
 
 function openSpacesConference() {
-
+	console.log("openSpacesConference");
+	console.log("incall 1 = " + inCall);
 	if (inCall) {
+		console.log("openSpacesConference close");
 		closeSpacesConference();
+		console.log("incall 2 = " + inCall);
 		return;
 	}
 	// var input = document.getElementById("roomNumber").value;
@@ -566,8 +577,11 @@ function initiateSpacesCall() {
 		}
 	});
 	call.addOnCallConferenceStatusChangedCallback(function (call) {
+		console.log("C1");
 		collaboration.addOnCollaborationServiceAvailableCallback(() => {
+			console.log("C2");
 			collaboration.getContentSharing().addOnContentSharingStartedCallback(() => {
+				console.log("C3");
 				if (onScreenShare) {
 					contentSharingRenderer = new AvayaClientServices.Renderer.Konva.KonvaContentSharingRenderer();
 					document.querySelector("#localVideoElement").srcObject = collaboration.getContentSharing().getOutgoingScreenSharingStream();
@@ -628,6 +642,7 @@ function initiateSpacesCall() {
 			"topicId": spaceId
 		};
 		socketConnection.emit('SEND_PRESENCE_EVENT', presencePayload);
+		console.log("setting incall to true");
 		inCall = true;
 
 		try {
@@ -655,39 +670,67 @@ function initiateSpacesCall() {
 	call.start();
 }
 
-function populateChats() {
+function populateTraceChats() {
+    $.ajax({
+        headers: {
+            'Authorization': 'jwt ' + token,
+            'Accept': 'application/json',
+            'spaces-x-space-password': password
+        },
+        url: 'https://spacesapis.avayacloud.com/api/spaces/' + spaceId + '/messages/query?category=chat&size=50',
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            console.dir(data);
+            var entries = data.total;
+            var msg;
+            var message;
+            var strLength;
+            for (i = entries - 1; i >= 0; i--) {
+                msg = data.data[i];
+                message = msg.content.bodyText;
+                if (msg.content.data.length > 0) {
+                    message = msg.sender.displayname + ": " + msg.content.data[0].name + " " + msg.content.data[0].fileId;
+                } else if (message.includes("<p>")) {
+                    // Chat messages from Spaces come in the form <p>message goes here<p>
+                    strLength = msg.content.bodyText.length;
+                    // Decode ' and " characters
+                    message = msg.sender.displayname + ": " + msg.content.bodyText.substring(3, strLength - 4).replace(new RegExp("&" + "#" + "x27;", "g"), "'").replace(/&quot;/g, '"');
+                } else {
+                    message = msg.sender.displayname + ": " + message.replace(new RegExp("&" + "#" + "x27;", "g"), "'").replace(/&quot;/g, '"');
+                }
+                console.log(message);
+                writeToTrace(message);
+            }
+        },
+        error: function(error) {
+            console.log(`Error ${error}`);
+            console.log("error");
+        }
+    });
+}
+
+function populateTraceIdeas() {
 	$.ajax({
 		headers: {
 			'Authorization': 'jwt ' + token,
 			'Accept': 'application/json',
 			'spaces-x-space-password': password
 		},
-		url: 'https://spacesapis.avayacloud.com/api/spaces/' + spaceId + '/messages/query?category=chat&size=50',
+		url: 'https://spacesapis.avayacloud.com/api/spaces/' + spaceId + '/messages/query?category=idea&size=50',
 		type: "GET",
 		dataType: "json",
 		success: function (data) {
 			var entries = data.total;
 			for (i = entries - 1; i >= 0; i--) {
 				msg = data.data[i];
-				var message;
-				if (msg.content.data !== undefined) {
-					if (msg.content.data.length > 0) {
-						message = msg.sender.displayname + ": " + msg.content.data[0].name + " " + msg.content.data[0].path;
-					}
-				}
-				// Chat messages from Spaces come in the form <p>message goes here<p>
-				if (message.includes("<p>")) {
-					var strLength = msg.content.bodyText.length;
-					// Decode ' and " characters
-					message = msg.sender.displayname + ": " + msg.content.bodyText.substring(3, strLength - 4).replace(new RegExp("&" + "#" + "x27;", "g"), "'").replace(/&quot;/g, '"');
-				} else {
-					message = msg.sender.displayname + ": " + message.replace(new RegExp("&" + "#" + "x27;", "g"), "'").replace(/&quot;/g, '"');
-				}
-				trace(message);
+				var message = msg.content.bodyText;
+				var path = msg.content.data[0].path;
+				message = msg.sender.displayname + ": " + message + " " + msg.content.data[0].fileId;
+				writeToTrace(message);
 			}
 		},
 		error: function (error) {
-			console.log("Chats error");
 			console.log(`Error ${error}`);
 		}
 	});
@@ -712,10 +755,125 @@ function resetZoom() {
 	contentSharingRenderer.zoom(confUI.contentSharingRendererZoom);
 }
 
+function uploadFile() {
+	getAccessToken().then(function(data) {
+			startUploadFile(data.accessToken);
+		}).catch(function(err) {
+			console.log("getAccessToken Failure");
+		})
+}
+
+function googleUpload(storageURL, fileKey) {
+	var mySelectedFile = document.getElementById('fileName').files[0];
+	$.ajax({
+		url: storageURL,
+		type: "put",
+		processData: false,
+		contentType: mySelectedFile.type,
+		headers: {
+			'Accept': 'application/json',
+			'Content-type': mySelectedFile.type
+		},
+		data: mySelectedFile,
+		success: function (result) {
+			var post = {
+				chatMessages: {},
+				category: 'idea',
+				content: {
+					assignees: [],
+					bodyText: mySelectedFile.name,
+					description: mySelectedFile.name,
+					status: "pending",
+					data: [{
+						"fileId": fileKey,
+						"fileSize": mySelectedFile.size,
+						"fileType": "document",
+						"icon": "",
+						"name": mySelectedFile.name,
+						"provider": "native",
+						"providerFileType": mySelectedFile.type
+					}]
+				},
+				topicId: spaceId,
+				version: "1.1"
+			};
+			console.log("Sending file " + authenticatedSocketConnection);
+			authenticatedSocketConnection.emit('SEND_MESSAGE', post)
+		},
+		error: function (log) {
+			// handle error
+			console.log("Google Upload Error");
+		}
+	});
+}
+
+function startUploadFile(authToken) {
+	var selectedFile = document.getElementById('fileName').files[0];
+	console.dir(selectedFile);
+	var uploadData = {
+		files: [{
+			"Content-Type": selectedFile.type,
+			"Content-Length": selectedFile.size
+		}]
+	};
+	$.ajax({
+		headers: {
+			'Authorization': 'Bearer ' + authToken,
+			'Accept': 'application/json',
+			'Content-type': 'application/json'
+		},
+		url: 'https://spacesapis.avayacloud.com/api/files/getuploadurl',
+		type: "post",
+		dataType: "json",
+		contentType: 'application/json',
+		data: JSON.stringify(uploadData),
+		success: function (data) {
+			var googleURL = data.data[0].url;
+			var fileKey = data.data[0].fileKey;
+			console.log("url : " + googleURL);
+			googleUpload(googleURL, fileKey);
+			document.getElementById("fileName").reset() ;
+		},
+		error: function (error) {
+			console.log(`Error ${error}`);
+		}
+	});
+}		
+
+function connectAuthenticatedSocket() {
+	getAccessToken().then(function(data) {
+		authenticatedToken = data.accessToken;
+		var connectionPayload = {
+			query: "token=" + authenticatedToken + "&tokenType=oauth",
+			transports: ['websocket']
+		};
+		authenticatedSocketConnection = io.connect(socketURL, connectionPayload);
+		authenticatedSocketConnection.on('connect', function () {
+			// On connect, subscribe to room
+			var spaceToSubscribe = {
+				channel: {
+					_id: spaceId,
+					type: 'topic',
+					password: password
+				}
+			};
+			authenticatedSocketConnection.emit('SUBSCRIBE_CHANNEL', spaceToSubscribe);
+		});	
+		authenticatedSocketConnection.on('SEND_MESSAGE_FAILED', function (error) {
+			//console.log('Auth SEND_MESSAGE_FAILED ' + error);
+		});		
+		authenticatedSocketConnection.on('MESSAGE_SENT', function (msg) {
+			//console.log('Auth MESSAGE_SENT');
+		});	
+	}).catch(function(err) {
+			console.log("getAccessToken Failure");
+	})	
+}
+
 function joinSpace() {
 	input = document.getElementById("password").value;
 	if (input.trim() != '') {
-		password = document.getElementById("password").value;
+		password = document.getElementById("password").value;		
 	} else {
 		password = null;
 	}
@@ -736,6 +894,8 @@ function joinSpace() {
 				query: "token=" + token + "&tokenType=jwt",
 				transports: ['websocket']
 			};
+			connectAuthenticatedSocket();
+			
 			socketConnection = io.connect(socketURL, connectionPayload);
 
 			socketConnection.on('connect', function () {
@@ -752,7 +912,8 @@ function joinSpace() {
 
 			socketConnection.on("CHANNEL_SUBSCRIBED", (channelInfo) => {
 				// Once subscribed, start the process of calling the space
-				//populateChats();
+				populateTraceChats();
+				populateTraceIdeas();
 				let presencePayload = {
 					"category": "app.event.presence.party.online",
 					"content": {
@@ -780,38 +941,65 @@ function joinSpace() {
 			socketConnection.on('MESSAGE_SENT', function (msg) {
 				var category = msg.category;
 				if (category == "chat") {
-					var message;
 					message = msg.content.bodyText;
-					if (msg.content.data.length > 0) {
-						message = msg.sender.displayname + ": " + msg.content.data[0].name + " " + msg.content.data[0].path;
-					} else if (message.includes("<p>")) {
-						// Chat messages from Spaces on a web browswer come in the form <p>chat text<p>
-						var strLength = msg.content.bodyText.length;
+					if (msg.content.data !== undefined) {
+						if (msg.content.data.length > 0) {
+							message = msg.sender.displayname + ": " + msg.content.data[0].name + " " + msg.content.data[0].fileId;
+							writeToTrace(message);
+							return;
+						}
+					}						
+					// Chat messages from Spaces come in the form <p>message goes here<p>
+					if (message.includes("<p>")) {
+						strLength = msg.content.bodyText.length;
 						// Decode ' and " characters
-						message = msg.sender.displayname + ": " + msg.content.bodyText.substring(3, strLength - 4).replace(new RegExp("&" + "#" + "x27;", "g"), "'").replace(/&quot;/g, '"');
+						message = msg.sender.displayname + ": " + message.substring(3, strLength - 4).replace(new RegExp("&" + "#" + "x27;", "g"), "'").replace(/&quot;/g, '"');
 					} else {
 						message = msg.sender.displayname + ": " + message.replace(new RegExp("&" + "#" + "x27;", "g"), "'").replace(/&quot;/g, '"');
 					}
-					trace(message);
-					if (msg.content.bodyText.includes("@abc") || msg.content.bodyText.includes("@ABC") || msg.content.bodyText.includes("@bot")) {
-						sendToDialogflow(msg.content.bodyText.substring(5));
+					writeToTrace(message);
+				} else if (category == "task") {
+					message = msg.content.bodyText;
+					description = msg.content.description;
+					if (description.includes("<p>")) {
+						strLength = msg.content.description.length;
+						// Decode ' and " characters
+						message = "Task: " + message + " / " + description.substring(3, strLength - 4).replace(new RegExp("&" + "#" + "x27;", "g"), "'").replace(/&quot;/g, '"');
+					} else {
+						message = "Task: " + message + " / " + description.replace(new RegExp("&" + "#" + "x27;", "g"), "'").replace(/&quot;/g, '"');
 					}
+					writeToTrace(message);
+				} else if (category == "idea") {
+					message = msg.content.bodyText;
+					path = msg.content.data[0].path;
+					fileKey = msg.content.data[0].fileId;
+
+/* 					callCuttly(path).then(function(data) {
+						message = msg.sender.displayname + ": " + data.link;
+						writeToTrace(message);
+					}).catch(function(err) {
+						console.log("Cuttly Failure");
+					})	 */				
+					
+					message = msg.sender.displayname + ": " + msg.content.data[0].name + " " + fileKey;
+					writeToTrace(message);
 				}
 			});
 
 			socketConnection.on('connect_error', function (error) {
-				//console.log('Socket connection error: ' + error);
+				console.log('Socket connection error: ' + error);
 			});
 
 			socketConnection.on('error', function (error) {
-				//console.log('Socket error: ' + error);
+				console.log('Socket error: ' + error);
 			});
 
 			socketConnection.on('disconnect', function () {
-				//console.log('Socket disconnected.');
+				console.log('Socket disconnected.');
 			});
 
 			socketConnection.on('PRESENCE_EVENT_RESPONSE', function (msg) {
+				console.log("Presence received");
 				if (msg.category == "app.event.presence.party.online") {
 					peopleInMeeting.push(msg.sender);
 					confUI.displayPeopleInMeeting(peopleInMeeting);
@@ -926,6 +1114,7 @@ function closeSpacesConference() {
 			}
 		};
 		socketConnection.emit('UNSUBSCRIBE_CHANNEL', payload);
+		authenticatedSocketConnection.emit('UNSUBSCRIBE_CHANNEL', payload);
 
 		let presencePayload = {
 			"category": "app.event.presence.party.leaves",
@@ -949,17 +1138,22 @@ function closeSpacesConference() {
 		socketConnection.emit('SEND_PRESENCE_EVENT', presencePayload);
 
 		if (conferenceCall) {
+			console.log("3");
 			conferenceCall.end();
 			stopLocalVideo();
 			stopRemoteVideo()
+			console.log("4");
 		}
 	}
-	init();
+	console.log("5");
+	inCall = false;
+	initConfSettings();
+	console.log("6");
 	token = null;
 	clearTrace();
-	if (document.getElementById("delete").checked == true) {
+/* 	if (document.getElementById("delete").checked == true) {
 		deleteRoomAccessToken();
-	}
+	} */
 
 	confUI.closeSpacesConference();
 }

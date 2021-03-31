@@ -57,6 +57,8 @@
         font-weight: 700;
         text-align: center;
       }
+
+
     </style>
   </head>
 
@@ -74,7 +76,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#loginModal"
                     data-bs-dismiss="modal"
-                    >Log in</a
+                    >Connect</a
                   >
                   <span></span>
                   <a
@@ -104,11 +106,11 @@
                 <div class="row align-items-center">
                   <div class="col-lg-12 hero__content__text">
                     <h2>A new way <span>to</span></h2>
-                    <h1>Discovery</h1>
+                    <h1>Engage & Discover</h1>
                     <h4>
-                      We deliver latest market intel that attracts qualifed
-                      buyers, selles, renters <br />
-                      and investors to your listing
+                      We deliver the latest market intelligence that attracts
+                      qualifed buyers, sellers, renters, <br />
+                      and investors
                     </h4>
                     <br />
                     <br />
@@ -180,7 +182,7 @@
                               src="img/login.png"
                               height="40px"
                               alt="" /></i
-                          >Log In</a
+                          >Connect With Specialist</a
                         >
                         <a
                           type="button"
@@ -281,13 +283,16 @@
                                     font-weight: 700;
                                   "
                                 >
-                                  Thank you for your Register
+                                  Thank you for Registering!
                                 </p>
                               </div>
                             </div>
                           </div>
                           <div class="mb-4">
-                            <label class="form-label">Email Address</label>
+                            You must login to connect to a realty specialist
+                            <br />
+                            <br />
+                            <label class="form-label">Email Address:</label>
                             <input
                               type="email"
                               id="email3"
@@ -296,7 +301,7 @@
                             />
                           </div>
                           <div class="mb-4">
-                            <label class="form-label">Password</label>
+                            <label class="form-label">Password:</label>
                             <input
                               type="password"
                               required
@@ -322,7 +327,7 @@
                               type="button"
                               onclick="findSpacesUser()"
                             >
-                              Join Space
+                              Connect
                             </button>
                             <!-- <button id="find" class="btn btn-primary" onclick="findSpacesUser()">Find User</button> -->
                           </div>
@@ -444,7 +449,7 @@
                               />
                             </div>
                             <div class="mb-4 col-6">
-                              <label class="form-label">Email Address</label>
+                              <label class="form-label">Email Address*</label>
                               <input
                                 class="form-control emailown"
                                 id="email"
@@ -558,8 +563,8 @@
                                     color: #666;
                                   "
                                   onClick="confUI.showSpeakerSettings()"
-                                  data-toggle="modal"
-                                  data-target="#speakerSettingsModal"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#speakerSettingsModal"
                                 ></i>
                                 <span
                                   id="usernameDisplay"
@@ -628,7 +633,7 @@
                               ></video>
                               <div id="screenReceiveFrame"></div>
                             </div>
-                            <div class="col-3" id="chatDisplayDiv">
+                            <div class="col-3 mt-4" id="chatDisplayDiv">
                               <div id="littleVideoDiv">
                                 <video
                                   autoplay="autoplay"
@@ -657,7 +662,7 @@
                                       >Chat</a
                                     >
                                   </li>
-                                  <li id="peopleTab" class="nav-item">
+                                  <!-- <li id="peopleTab" class="nav-item">
                                     <a
                                       class="brandBackgroundColor brandText nav-link"
                                       role="tab"
@@ -665,7 +670,7 @@
                                       href="#tab-2"
                                       >People</a
                                     >
-                                  </li>
+                                  </li> -->
                                   <li id="showVideoButton" class="nav-item">
                                     <a
                                       class="brandBackgroundColor brandText nav-link"
@@ -683,18 +688,82 @@
                                     id="tab-1"
                                   >
                                     <div id="console-log" readonly=""></div>
-                                    <textarea
+                                    <div class="d-flex" style="border-top: 1px solid #eee;">
+
+                                      <textarea autofocus rows="1" class="mt-0 p-3" style="width: 100%; resize: none; border: 0; border-radius: 0 0 10px 10px; overflow: auto; outline: none;"
                                       id="message"
-                                      style="width: 100%"
-                                    ></textarea>
-                                    <button
-                                      class="btn btn-primary-own brandBackgroundColor brandText mt-2"
+                                      ></textarea>
+                                      <button
+                                      class="btn btn-primary-own brandBackgroundColor rounded-circle mt-2 py-2"
                                       id="sendMsg"
                                       type="button"
-                                      style="width: 100%"
-                                    >
-                                      Send Chat
+                                      style="position: absolute; right: 3rem; text-align: center; width: 40px; height: 40px; display: flex; align-items: center; justify-content: flex-end;"
+                                      >
+                                      <i style="color: #fff;" class="fa fa-paper-plane"></i> 
                                     </button>
+                                    </div>
+                                  <script> document.getElementById('message').focus(); </script>
+                                    
+
+                                    
+                                    <!-- <div class="d-flex">
+                                      <div
+                                        style="
+                                          width: 50%;
+                                          height: 100px;
+                                          float: left;
+                                        "
+                                      >
+                                        <input type="file" id="fileName" />
+                                      </div>
+                                      <div
+                                        style="margin-left: 80%; height: 100px"
+                                      >
+                                        <button
+                                          id="upload"
+                                          class="btn btn-primary-own"
+                                          onclick="uploadFile()"
+                                        >
+                                          Upload
+                                        </button>
+                                      </div>
+                                    </div> -->
+                                    
+                                    <div style="height: 50px;" class="d-flex mt-3 justify-content-between">
+                                      <input type="file" name="file-1" id="fileName" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple />
+                                      <label for="fileName">
+                                      <i style="padding-right: 10px; color: #da291c;" class="fa fa-paperclip"></i> 
+                                      <span class="iborrainputfile"> Select File</span>
+                                      </label>
+                                      <button class="btn px-4 btn-primary" type="button" onclick="uploadFile()" id="upload">Upload</button>
+                                    </div>
+                                    <script>
+                                      'use strict';
+                                      ;( function ( document, window, index )
+                                      {
+                                        var inputs = document.querySelectorAll( '.inputfile' );
+                                        Array.prototype.forEach.call( inputs, function( input )
+                                        {
+                                          var label	 = input.nextElementSibling,
+                                            labelVal = label.innerHTML;
+
+                                          input.addEventListener( 'change', function( e )
+                                          {
+                                            var fileName = '';
+                                            if( this.files && this.files.length > 1 )
+                                              fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+                                            else
+                                              fileName = e.target.value.split( '\\' ).pop();
+
+                                            if( fileName )
+                                              label.querySelector( 'span' ).innerHTML = fileName;
+                                            else
+                                              label.innerHTML = labelVal;
+                                          });
+                                        });
+                                      }( document, window, 0 ));
+                                    </script>
+
                                   </div>
                                   <div
                                     class="tab-pane"
@@ -881,24 +950,25 @@
                   <div class="chat-in row">
                     <div class="col-sm-8 title-chat">
                       <figure><img src="images/chat.png" alt="" /></figure>
-                      <h1>Spaces Webchat</h1>
+                      <h1>Chat With a Receptionist</h1>
                     </div>
-                    <!-- <div class="col-sm-4 d-flex">
+                     <!-- <div class="col-sm-4 d-flex">
                                         <input placeholder="Room Number" type="email" class="form-control" id="room2">
                                     </div> -->
-                    <!-- <div class="col-sm-4 d-flex">
-                                        <input placeholder="Password" class="form-control" type="password" id="password2">
-                                    </div> -->
-                    <div class="col-sm-4 mt-2">
-                      <button
+                     <div class="col-sm-12 d-flex">
+                                        <input placeholder="Name" class="form-control me-4" type="text" id="userChat">
+                                        <button
                         id="connect2"
-                        class="btn btn-danger"
+                        class="btn btn-danger p-3"
                         onclick="startConnect()"
                       >
                         Connect
                       </button>
+                    </div> 
+                    <div class="col-sm-4 mt-2">
+                      
                     </div>
-
+                    
                     <div class="col-sm-12 mt-3 mb-3">
                       <div class="col-12">
                         <div style="width: 100%" class="form-group mb-3">
@@ -907,6 +977,7 @@
                             class="form-control"
                             id="message2"
                             rows="3"
+                            disabled
                           ></textarea>
                         </div>
                         <button
@@ -914,6 +985,7 @@
                           id="sendMsg2"
                           class="btn btn-primary col-sm-12"
                           onclick="sendMsg()"
+                          disabled
                         >
                           Send
                         </button>
@@ -1096,7 +1168,7 @@
           <div class="col-lg-4 offset-lg-1">
             <div class="row">
               <div class="col-12 price-container">
-                <p class="price m-0">$300.000</p>
+                <p class="price m-0">$300,000</p>
               </div>
             </div>
             <div class="row house-information">
@@ -1289,26 +1361,20 @@
       </footer>
     </div>
 
-    <div id="speakerSettingsModal" class="modal fade" role="dialog">
-      <div class="modal-dialog">
+    <div id="speakerSettingsModal" class="modal fade" tabindex="-1" aria-hidden="true" role="dialog">
+      <div style="max-width: 400px;" class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Device Settings</h4>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              onClick="confUI.closeSpeakerSettings()"
-            >
-              &times;
-            </button>
-          </div>
-          <div class="modal-body">
-            <table>
+          
+          <div class="modal-body p-4">
+            <h2 class="mb-4" style="font-size: 1.5rem; text-align: center; font-family: 'Noto Sans JP'; font-weight: 400"><i
+              class="fa fa-gear mr-2"
+              style="color: #666;"
+            ></i> Device Settings</h2>
+            <table align="center">
               <tr>
                 <td align="right">
-                  <label for="micList"> Microphone: </label>
+                  <label for="micList"><b>Microphone:</b> </label>
                 </td>
                 <td align="left">
                   <select
@@ -1321,7 +1387,7 @@
                 </td>
               </tr>
               <tr>
-                <td align="right"><label for="cameraList">Camera: </label></td>
+                <td align="right"><label for="cameraList"><b>Camera:</b> </label></td>
                 <td align="left">
                   <select
                     class="form-control"
@@ -1334,7 +1400,7 @@
               </tr>
               <tr>
                 <td align="right">
-                  <label for="speakersList">Speakers: </label>
+                  <label for="speakersList"><b>Speakers:</b> </label>
                 </td>
                 <td align="left">
                   <select
@@ -1351,8 +1417,8 @@
           <div class="modal-footer">
             <button
               type="button"
-              class="btn btn-default"
-              data-dismiss="modal"
+              class="btn btn-danger p-2"
+              data-bs-dismiss="modal"
               onClick="confUI.closeSpeakerSettings()"
             >
               Close

@@ -94,7 +94,7 @@ var confUI = {
         $('#joinSpaceButton').click(checkCustomSettings);
         $('#joinSpaceButton2').click(openSpacesConference);
         $('#joinSpaceButton2').click(checkCustomSettings);
-        $('#find').click(openSpacesConference);
+        //$('#find').click(openSpacesConference);
 
         $('#toggleVideoButton').click(confUI.toggleVideoStreams);
 
@@ -147,6 +147,7 @@ var confUI = {
         $('#startRecording').prop("disabled", true);
         $('#screenshare').prop("disabled", true);
         $('#sendMsg').prop("disabled", true);
+		$('#upload').prop("disabled", true);
         $('#littleVideoDisplay2').hide();
         $('#screenReceiveFrame').hide();
 
@@ -201,6 +202,7 @@ var confUI = {
         $('#startRecording').prop("disabled", false);
         $('#screenshare').prop("disabled", false);
         $('#sendMsg').prop("disabled", false);
+		$('#upload').prop("disabled", false);
 
         $('.nonMainMediaControlButton').show();
 

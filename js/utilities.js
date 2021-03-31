@@ -9,44 +9,56 @@ var email;
 var firstName;
 var lastName;
 
-function newUser() {	
-	// Get Access token, create Spaces room, add user record to database collection
-	getAccessToken().then(function(data) {
-		spacesToken = data.accessToken;
-		console.log("spacesToken: " + spacesToken);			
-		createSpacesRoom(spacesToken, "Description", "Room for " + document.getElementById("email").value).then(function(data) {
-			room = data.data[0].topicId;
-			console.log("room: " + room);
-			pwd = document.getElementById("password").value;
-			email = document.getElementById("email").value;
-			firstName = document.getElementById("firstname").value;
-			lastName = document.getElementById("lastname").value;
-			telephone = document.getElementById("telephone").value;
-			addUser(email, pwd, firstName, lastName, telephone, room);
-			$('#createModal').modal('hide');   
-			$('#loginModal').modal('show');
-			$('#liveToast').toast('show');
-			document.getElementById("s-form").reset()   
-		}).catch(function(err) {
-			console.log("createSpacesRoom Failure");
-		})				
+function newUser() {
+	findUser(document.getElementById("email").value).then(function(data) {	
+		if (data.totals.total != 0) {
+			window.alert("Email address already exists");
+		} else {;			
+			// Get Access token, create Spaces room, add user record to database collection
+			getAccessToken().then(function(data) {
+				spacesToken = data.accessToken;
+				console.log("spacesToken: " + spacesToken);			
+				createSpacesRoom(spacesToken, "Description", "Room for " + document.getElementById("email").value).then(function(data) {
+					room = data.data[0].topicId;
+					pwd = document.getElementById("password").value;
+					email = document.getElementById("email").value;
+					firstName = document.getElementById("firstname").value;
+					lastName = document.getElementById("lastname").value;
+					telephone = document.getElementById("telephone").value;
+					addUser(email, pwd, firstName, lastName, telephone, room);
+					$('#createModal').modal('hide');   
+					$('#loginModal').modal('show');
+					$('#liveToast').toast('show');
+					document.getElementById("s-form").reset()   
+					setSpacesPublic(spacesToken, room);
+				}).catch(function(err) {
+					console.log("createSpacesRoom Failure");
+				})				
+			}).catch(function(err) {
+				console.log("getAccessToken Failure");
+			})						
+		}
 	}).catch(function(err) {
-		console.log("getAccessToken Failure");
+			console.log("findSpacesUser Failure");			
 	})
 }
 
 function findSpacesUser() {
+	console.log("Find Spaces User Clicked");
 	findUser(document.getElementById("email3").value).then(function(data) {
+		console.log("Find Spaces User");
 		if (data.totals.total != 0) {  // If totals.total == 0 then no user was found
 			console.log("Email: " + data.data[0].email + " Room: " + data.data[0].room);
 			var password = data.data[0].password;
 			if (document.getElementById("password3").value != password) {
 				alert("Invalid Password");
 			} else {
+				setSpaceId(data.data[0].room);
+				openSpacesConference();
 				// location.href = "loggedin.html"; 
-				alert("You are login");
+				//alert("You are logged in");
 				$('#loginModal').modal('hide');
-				$('#loginOkModal').modal('show');
+				$('#loginOkModal').modal('show');				
 				document.getElementById("lform").reset()   
 			}
 		} else {
@@ -261,4 +273,31 @@ function findUser(emailId) {
 			}
 		});	
 	});		
+}
+
+function setSpacesPublic(token, room) {
+	$.ajax({
+				   headers: {
+								 'Accept': 'application/json',
+								 'Content-type': 'application/json',
+								 'Authorization': 'Bearer ' + token
+				   },
+				  data: JSON.stringify(
+				   {
+								 "settings": {
+												"memberOnly":false
+								 }
+				   }),
+				   url: 'https://spacesapis.avayacloud.com/api/spaces/' + room,
+				   type: "POST",
+				   dataType: "json",
+				   contentType: 'application/json',
+				   success: function(data) {
+								 //console.log("Public success");
+				   },
+				   error: function(error) {
+								 console.log("Public Error");
+								 console.dir(`Error ${error}`);
+				   }
+	});                        
 }

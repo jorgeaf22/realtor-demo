@@ -6,7 +6,7 @@ function init() {
 
 var spacesToken;
 var socketURL = "https://spacesapis-socket.avayacloud.com/chat";
-var spacesID = "5f1f2f794758efceeeeb90a8";
+var spacesID = "6054ed191be7f79fb49e26ad";
 var socketio = "";
 var password;
 var modalChat;
@@ -251,7 +251,7 @@ function startConnect() {
 
     $.ajax({
         data: JSON.stringify({
-            "displayname": "Chatty McChat",
+            "displayname": document.getElementById("userChat").value,
             "username": "Anonymous"
         }),
         url: "https://spacesapis.avayacloud.com/api/anonymous/auth",
@@ -261,6 +261,8 @@ function startConnect() {
             spacesToken = data.token;
             joinRoom();
             connectSocket();
+			$('#sendMsg2').prop( "disabled", false );
+			$('#message2').prop( "disabled", false );
         },
         error: function(error) {}
     });
